@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "231471207679",
+    "firebase_url": "https://test-66949.firebaseio.com",
+    "project_id": "test-66949",
+    "storage_bucket": "test-66949.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231471207679:android:faac0cbf4b3439b6b8a8ca",
+        "android_client_info": {
+          "package_name": "com.skorit.goroskop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "231471207679-bbl87ta9ldo45i17nm4h3c5gmrth94ue.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwydVkiEIyUN1LAd79Bx0Y3OF0x4zwZVs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "231471207679-bbl87ta9ldo45i17nm4h3c5gmrth94ue.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
