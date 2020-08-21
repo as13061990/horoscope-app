@@ -15,7 +15,8 @@ import {
   Dimensions,
   TouchableOpacity,
   ImageBackground,
-  AsyncStorage
+  AsyncStorage,
+  ScrollView
 } from 'react-native';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -27,45 +28,118 @@ const data = [
   {
     uri: require('./assets/images/sagittarius.png'),
     icon: require('./assets/images/sagittarius-icon.png'),
-    sign: 'sagittarius',
-    nameSign: 'Стрелец 1',
-    period: '23 Ноября – 21 Декабря',
+    sign: 'aries',
+    nameSign: 'Овен',
+    period: '21 марта – 20 апреля',
+    desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
+  },
+  {
+    uri: require('./assets/images/sagittarius.png'),
+    icon: require('./assets/images/sagittarius-icon.png'),
+    sign: 'taurus',
+    nameSign: 'Телец',
+    period: '21 апреля – 21 мая',
+    desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
+  },
+  {
+    uri: require('./assets/images/sagittarius.png'),
+    icon: require('./assets/images/sagittarius-icon.png'),
+    sign: 'gemini',
+    nameSign: 'Близнецы',
+    period: '22 мая – 21 июня',
+    desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
+  },
+  {
+    uri: require('./assets/images/sagittarius.png'),
+    icon: require('./assets/images/sagittarius-icon.png'),
+    sign: 'cancer',
+    nameSign: 'Рак',
+    period: '22 июня – 22 июля',
+    desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
+  },
+  {
+    uri: require('./assets/images/sagittarius.png'),
+    icon: require('./assets/images/sagittarius-icon.png'),
+    sign: 'leo',
+    nameSign: 'Лев',
+    period: '23 июля – 23 августа',
+    desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
+  },
+  {
+    uri: require('./assets/images/sagittarius.png'),
+    icon: require('./assets/images/sagittarius-icon.png'),
+    sign: 'virgo',
+    nameSign: 'Дева',
+    period: '24 августа – 22 сентября',
+    desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
+  },
+  {
+    uri: require('./assets/images/sagittarius.png'),
+    icon: require('./assets/images/sagittarius-icon.png'),
+    sign: 'libra',
+    nameSign: 'Весы',
+    period: '23 сентября – 22 октября',
+    desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
+  },
+  {
+    uri: require('./assets/images/sagittarius.png'),
+    icon: require('./assets/images/sagittarius-icon.png'),
+    sign: 'scorpio',
+    nameSign: 'Скорпион',
+    period: '23 октября – 22 ноября',
     desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
   },
   {
     uri: require('./assets/images/sagittarius.png'),
     icon: require('./assets/images/sagittarius-icon.png'),
     sign: 'sagittarius',
-    nameSign: 'Стрелец 2',
-    period: '23 Ноября – 21 Декабря',
+    nameSign: 'Стрелец',
+    period: '23 ноября – 21 декабря',
     desc: 'Это фиксированный знак стихии воды. '
   },
   {
     uri: require('./assets/images/sagittarius.png'),
     icon: require('./assets/images/sagittarius-icon.png'),
-    sign: 'sagittarius',
-    nameSign: 'Стрелец 3',
-    period: '23 Ноября – 21 Декабря',
-    desc: 'Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
+    sign: 'capricorn',
+    nameSign: 'Козерог',
+    period: '22 декабря – 20 января',
+    desc: 'Это фиксированный знак стихии воды. '
   },
   {
     uri: require('./assets/images/sagittarius.png'),
     icon: require('./assets/images/sagittarius-icon.png'),
-    sign: 'sagittarius',
-    nameSign: 'Стрелец 4',
-    period: '23 Ноября – 21 Декабря',
-    desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
+    sign: 'aquarius',
+    nameSign: 'Водолей',
+    period: '21 января – 19 февраля',
+    desc: 'Это фиксированный знак стихии воды. '
   },
   {
     uri: require('./assets/images/sagittarius.png'),
     icon: require('./assets/images/sagittarius-icon.png'),
-    sign: 'sagittarius',
-    nameSign: 'Стрелец 5',
-    period: '23 Ноября – 21 Декабря',
-    desc: 'Это фиксированный знак стихии воды.'
-  }
+    sign: 'pisces',
+    nameSign: 'Рыбы',
+    period: '20 февраля – 20 марта',
+    desc: 'Это фиксированный знак стихии воды. '
+  },
 ];
-const startIndex = 1;
+const horoscopes = {
+  aries: '',
+  taurus: '',
+  gemini: '',
+  cancer: '',
+  leo: '',
+  virgo: '',
+  libra: '',
+  scorpio: '',
+  sagittarius: '',
+  capricorn: '',
+  aquarius: '',
+  pisces: ''
+}
+const todayWord = 'сегодня';
+const tomorrowWord = 'завтра';
+const startIndex = 5;
+const api = 'https://vk-irs.ru:4444/api';
 
 async function loadApplication() {
   await Font.loadAsync({
@@ -93,7 +167,7 @@ async function registerForPushNotificationsAsync() {
 
       token = (await Notifications.getExpoPushTokenAsync()).data;
       const params = { token: token }
-      axios.post("https://vk-irs.ru:4444/api/addPushToken", params);;
+      axios.post(api + "/addPushToken", params);
 
     }
 
@@ -123,34 +197,63 @@ Notifications.setNotificationHandler({
   }),
 });
 
-setHash = async () => {
+setHash = async (value) => {
   await AsyncStorage.setItem(
     'horoscope_id',
-    'sdfsdfsdfsdfsdfsdf'
+    value
   );
 };
 
 getHash = async () => {
-  const value = await AsyncStorage.getItem('horoscope_id');
-  if (value !== null) {
-    alert(value);
-  } else [
-    alert('хэша нет')
-  ]
-};
+  let value = await AsyncStorage.getItem('horoscope_id');
+  return value;
+}
 
 export default function App() {
   
   const [expoPushToken, setExpoPushToken] = useState('');
-  const [isReady, setIsReady] = useState(false);
   const [sign, setSign] = useState(data[startIndex]);
+  const [isReady, setIsReady] = useState(false);
+  const [load, setLoad] = useState(false);
+  const [id, setId] = useState(null);
+  const [newcomer, setNewcomer] = useState(true);
+  const [today, setToday] = useState(horoscopes);
+  const [tomorrow, setTomorrow] = useState(horoscopes);
+  const [day, setDay] = useState(true);
+  const [openPanel, setPanel] = useState(false);
 
   const notificationListener = useRef();
   const responseListener = useRef();
 
   useEffect(() => {
     
-    getHash();
+    getHash().then(id => {
+      axios.post(api + "/getData", { id: id }).then(res => {
+        setLoad(true);
+        setId(res.data.id);
+        setHash(res.data.id);
+        setNewcomer(res.data.newcomer);
+        setToday(res.data.today);
+        setTomorrow(res.data.tomorrow);
+
+        if (res.data.sign === 'aries' ||
+        res.data.sign === 'taurus' ||
+        res.data.sign === 'gemini' ||
+        res.data.sign === 'cancer' ||
+        res.data.sign === 'leo' ||
+        res.data.sign === 'virgo' ||
+        res.data.sign === 'libra' ||
+        res.data.sign === 'scorpio' ||
+        res.data.sign === 'sagittarius' ||
+        res.data.sign === 'capricorn' ||
+        res.data.sign === 'aquarius' ||
+        res.data.sign === 'pisces') {
+          let sign = data.find(data => data.sign === res.data.sign);
+          setSign(sign);
+        }
+
+      });
+    });
     
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
@@ -167,6 +270,7 @@ export default function App() {
 
   }, []);
 
+
   if (!isReady) {
     return (
       <AppLoading 
@@ -176,6 +280,89 @@ export default function App() {
       />
     )
   }
+
+
+  if (!load) {
+    return (
+      <>
+        <StatusBar hidden />
+        <View style={ styles.loadingBody }>
+          <LinearGradient
+            colors={[ '#08051B', '#03082D' ]}
+            style={ styles.bgGradient }
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 1 }}
+          />
+          <Text style={ styles.loading }>Загрузка...</Text>
+        </View>
+      </>
+    );
+  }
+
+
+  if (newcomer) {
+    return (
+      <>
+        <StatusBar hidden />
+        <View style={ styles.body }>
+          <LinearGradient
+            colors={[ '#08051B', '#03082D' ]}
+            style={ styles.bgGradient }
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 1 }}
+          />
+          <View style={ styles.header }>
+            <Text style={ styles.accurateLabel }>Точный</Text>
+            <Text style={ styles.horoscopeLabel }>гороскоп</Text>
+            <View style={ styles.cookieBlock }>
+              <Text style={ styles.cookieLabel }>От создателей печеньки</Text>
+              <Image source={ require('./assets/images/cookie.png') } />
+            </View>
+          </View>
+          <View style={ styles.content }>
+            <View style={ styles.carouselContainer }>
+              <Carousel
+                style={ styles.carousel }
+                data={ data }
+                renderItem={ renderItem }
+                itemWidth={ 0.7 * width }
+                inActiveOpacity={ 0.3 }
+                containerWidth={ width }
+                initialIndex={ startIndex }
+                onScrollEnd={ (sign) => setTimeout(() => setSign(sign), 40) }
+              />
+            </View>
+            <View style={ styles.description }>
+              <Text style={ styles.nameSign }>{ sign.nameSign }</Text>
+              <Text style={ styles.period }>{ sign.period }</Text>
+              <Text style={ styles.desc }>{ sign.desc }</Text>
+            </View>
+          </View>
+          <View style={ styles.footer }>
+            <TouchableOpacity
+              style={ styles.touchButton }
+              onPress={() => {
+                let choose = data.find(data => data.sign === sign.sign);
+                setNewcomer(false);
+                setSign(choose);
+                const params = { id: id, sign: sign.sign }
+                axios.post(api + "/setSign", params);
+              }}>
+              <LinearGradient
+                colors={[ '#0255D6', '#15FFE3' ]}
+                style={ styles.bigButton }
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Text style={ styles.bigButtonText }>Далее</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </>
+    );
+  }
+
 
   return (
     <>
@@ -187,60 +374,83 @@ export default function App() {
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
         />
-
-        <View style={ styles.header }>
-          <Text style={ styles.accurateLabel }>Точный</Text>
-          <Text style={ styles.horoscopeLabel }>гороскоп</Text>
-          <View style={ styles.cookieBlock }>
-            <Text style={ styles.cookieLabel }>От создателей печеньки</Text>
-            <Image source={ require('./assets/images/cookie.png') } />
-          </View>
-        </View>
-
-        <View style={ styles.content }>
-          
-          <View style={ styles.carouselContainer }>
-            <Carousel
-              style={ styles.carousel }
-              data={ data }
-              renderItem={ renderItem }
-              itemWidth={ 0.7 * width }
-              inActiveOpacity={ 0.3 }
-              containerWidth={ width }
-              initialIndex={ startIndex }
-              onScrollEnd={ (sign) => setSign(sign) }
-            />
-          </View>
-
-          <View style={ styles.description }>
-            <Text style={ styles.nameSign }>{ sign.nameSign }</Text>
-            <Text style={ styles.period }>{ sign.period }</Text>
-            <Text style={ styles.desc }>{ sign.desc }</Text>
-          </View>
-
-        </View>
-
-        <View style={ styles.footer }>
-          <TouchableOpacity
-            style={ styles.touchButton }
-            onPress={ () => {
-              setHash();
-            }}>
-            <LinearGradient
-              colors={[ '#0255D6', '#15FFE3' ]}
-              style={ styles.bigButton }
-              start={{ x: 0, y: 1 }}
-              end={{ x: 1, y: 1 }}
-            >
-              <Text style={ styles.bigButtonText }>Далее</Text>
-            </LinearGradient>
+        <View style={ styles.nav }>
+          <Image style={ styles.icon } source={ require('./assets/favicon.png') }></Image>
+          <Text style={ styles.accurateLogo }>Точный</Text>
+          <Text style={ styles.horoscopeLogo }>гороскоп</Text>
+          <TouchableOpacity style={ styles.chooseSign } onPress={ () => setPanel(!openPanel) }>
+            <Text style={ styles.chooseText }>{ sign.nameSign }</Text>
+            { openPanel
+            ?
+            <Image source={ require('./assets/images/close.png') }></Image>
+            :
+            <Image source={ require('./assets/images/open.png') }></Image>
+            }
           </TouchableOpacity>
         </View>
-
-
+        { openPanel &&
+        <View style={ styles.panel }>
+          { data.map((data, index) => (
+            <TouchableOpacity
+              key={ index }
+              onPress={ () => {
+                setPanel(false);
+                setSign(data);
+                const params = { id: id, sign: data.sign }
+                axios.post(api + "/setSign", params);
+              } }
+            >
+              <Text style={ styles.textPanel }>{ data.nameSign }</Text>
+            </TouchableOpacity>
+          )) }
+        </View>
+        }
+        <ScrollView style={ styles.scrollView }>
+          <View style={ styles.signBlock }>
+            <Image source={ sign.uri }></Image>
+            <Image style={ styles.signIcon } source={ sign.icon }></Image>
+          </View>
+          <View style={ styles.buttons }>
+            <TouchableOpacity
+              style={ styles.todayButton }
+              onPress={() => setDay(true) }
+            >
+              { day
+              ?
+              <LinearGradient
+                colors={[ '#0255D6', '#15FFE3' ]}
+                style={ styles.buttonGradient }
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+              ><Text style={ styles.dayText }>Сегодня</Text></LinearGradient>
+              :
+              <Text style={ styles.dayText }>Сегодня</Text>
+              }
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={ styles.tomorrowButton }
+              onPress={() => setDay(false) }
+            >
+              { day
+              ?
+              <Text style={ styles.dayText }>Завтра</Text>
+              :
+              <LinearGradient
+                colors={[ '#0255D6', '#15FFE3' ]}
+                style={ styles.buttonGradient }
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+              ><Text style={ styles.dayText }>Завтра</Text></LinearGradient>
+              }
+            </TouchableOpacity>
+          </View>
+          <Text style={ styles.horoscopeDay }>Гороскоп на { day ? todayWord : tomorrowWord }</Text>
+          <Text style={ styles.horoscopeText }>{ day ? today[sign.sign] : tomorrow[sign.sign] }</Text>
+        </ScrollView >
       </View>
     </>
-  );
+  )
+
 }
 
 function renderItem({ item }) {
@@ -266,13 +476,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgb(8,5,27)'
   },
+  loadingBody: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(8,5,27)'
+  },
   bgGradient: {
     position: 'absolute',
     left: 0,
     right: 0,
     top: 0
   },
-
   header: {
     alignItems: 'center',
     width: width,
@@ -309,12 +524,10 @@ const styles = StyleSheet.create({
     color: '#A0A3C0',
     marginRight: 7
   },
-
   content: {
     width: width,
     flex: 1
   },
-  
   footer: {
     display: 'flex',
     justifyContent: 'center',
@@ -375,5 +588,146 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingLeft: 10,
     paddingRight: 10
+  },
+  loading: {
+    fontFamily: 'Nasalization',
+    fontSize: 18,
+    color: '#ffffff',
+    textAlign: 'center',
+    textTransform: 'uppercase'
+  },
+  nav: {
+    width: width,
+    height: 83,
+    position: 'absolute',
+    left: 0,
+    top: 0
+  },
+  scrollView: {
+    width: width,
+    position: 'absolute',
+    top: 85,
+    bottom: 0
+  },
+  icon: {
+    position: 'absolute',
+    left: 20,
+    top: 21
+  },
+  accurateLogo: {
+    position: 'absolute',
+    left: 85,
+    top: 20,
+    fontFamily: 'Nasalization',
+    fontSize: 18,
+    textTransform: 'uppercase',
+    color: '#D8A255'
+  },
+  horoscopeLogo: {
+    position: 'absolute',
+    left: 85,
+    top: 40,
+    fontFamily: 'Nasalization',
+    fontSize: 18,
+    textTransform: 'uppercase',
+    color: '#ffffff'
+  },
+  chooseSign: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    position: 'absolute',
+    right: 0,
+    top: 22,
+    paddingLeft: 20,
+    paddingRight: 22,
+    paddingBottom: 10,
+    paddingTop: 10
+  },
+  chooseText: {
+    fontFamily: 'GothamPro',
+    fontSize: 14,
+    color: '#ffffff',
+    marginRight: 10
+  },
+  signBlock: {
+    marginTop: 5,
+    marginBottom: 5,
+    width: width,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  signIcon: {
+    position: 'absolute',
+    left: 23,
+    bottom: 23
+  },
+  buttons: {
+    width: width,
+    display: 'flex',
+    flexDirection: 'row',
+    paddingTop: 10,
+    paddingBottom: 25
+  },
+  todayButton: {
+    width: 131,
+    height: 36,
+    marginLeft: 23,
+    backgroundColor: '#0D0E31',
+    borderRadius: 10,
+    alignItems: 'center'
+  },
+  tomorrowButton: {
+    width: 131,
+    height: 36,
+    marginLeft: 10,
+    backgroundColor: '#0D0E31',
+    borderRadius: 10,
+    alignItems: 'center'
+  },
+  buttonGradient: {
+    width: 131,
+    height: 36,
+    borderRadius: 10,
+    alignItems: 'center'
+  },
+  dayText: {
+    marginTop: 6,
+    fontFamily: 'Nasalization',
+    fontSize: 13,
+    color: '#ffffff'
+  },
+  horoscopeDay: {
+    marginLeft: 23,
+    color: '#ffffff',
+    fontFamily: 'Nasalization',
+    fontSize: 19
+  },
+  horoscopeText: {
+    margin: 23,
+    fontFamily: 'GothamPro',
+    fontSize: 13,
+    lineHeight: 21,
+    color: '#BCBED1'
+  },
+  panel: {
+    zIndex: 1,
+    position: 'absolute',
+    right: 22,
+    top: 71,
+    backgroundColor: '#0D0E31',
+    borderRadius: 7,
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+  textPanel: {
+    color: '#fff',
+    textAlign: 'right',
+    fontFamily: 'GothamPro',
+    fontSize: 14,
+    lineHeight: 31,
+    paddingRight: 20,
+    paddingLeft: 45
   }
 });
