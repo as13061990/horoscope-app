@@ -26,64 +26,64 @@ const { width } = Dimensions.get('window');
 
 const data = [
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/aries.png'),
+    icon: require('./assets/images/aries-icon.png'),
     sign: 'aries',
     nameSign: 'Овен',
     period: '21 марта – 20 апреля',
     desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/taurus.png'),
+    icon: require('./assets/images/taurus-icon.png'),
     sign: 'taurus',
     nameSign: 'Телец',
     period: '21 апреля – 21 мая',
     desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/gemini.png'),
+    icon: require('./assets/images/gemini-icon.png'),
     sign: 'gemini',
     nameSign: 'Близнецы',
     period: '22 мая – 21 июня',
     desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/cancer.png'),
+    icon: require('./assets/images/cancer-icon.png'),
     sign: 'cancer',
     nameSign: 'Рак',
     period: '22 июня – 22 июля',
     desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/leo.png'),
+    icon: require('./assets/images/leo-icon.png'),
     sign: 'leo',
     nameSign: 'Лев',
     period: '23 июля – 23 августа',
     desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/virgo.png'),
+    icon: require('./assets/images/virgo-icon.png'),
     sign: 'virgo',
     nameSign: 'Дева',
     period: '24 августа – 22 сентября',
     desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/libra.png'),
+    icon: require('./assets/images/libra-icon.png'),
     sign: 'libra',
     nameSign: 'Весы',
     period: '23 сентября – 22 октября',
     desc: 'Это фиксированный знак стихии воды. Стрелец обладает природным магнетизмом и сильным характером. Скорпион умеет хранить секреты и ценит верность.'
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/scorpio.png'),
+    icon: require('./assets/images/scorpio-icon.png'),
     sign: 'scorpio',
     nameSign: 'Скорпион',
     period: '23 октября – 22 ноября',
@@ -98,24 +98,24 @@ const data = [
     desc: 'Это фиксированный знак стихии воды. '
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/capricorn.png'),
+    icon: require('./assets/images/capricorn-icon.png'),
     sign: 'capricorn',
     nameSign: 'Козерог',
     period: '22 декабря – 20 января',
     desc: 'Это фиксированный знак стихии воды. '
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/aquarius.png'),
+    icon: require('./assets/images/aquarius-icon.png'),
     sign: 'aquarius',
     nameSign: 'Водолей',
     period: '21 января – 19 февраля',
     desc: 'Это фиксированный знак стихии воды. '
   },
   {
-    uri: require('./assets/images/sagittarius.png'),
-    icon: require('./assets/images/sagittarius-icon.png'),
+    uri: require('./assets/images/pisces.png'),
+    icon: require('./assets/images/pisces-icon.png'),
     sign: 'pisces',
     nameSign: 'Рыбы',
     period: '20 февраля – 20 марта',
@@ -192,8 +192,8 @@ async function registerForPushNotificationsAsync() {
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldPlaySound: true,
+    shouldSetBadge: true
   }),
 });
 
@@ -463,9 +463,7 @@ function renderItem({ item }) {
       <ImageBackground
         source={ uri }
         style={ styles.imageBackground }
-      >
-        <Image source={ icon }></Image>
-      </ImageBackground>
+      ><Image source={ icon }></Image></ImageBackground>
     </TouchableOpacity>
   );
 }
