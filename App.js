@@ -1,5 +1,6 @@
 
 import Constants from 'expo-constants';
+import * as Amplitude from 'expo-analytics-amplitude';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
@@ -21,12 +22,8 @@ import {
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import Carousel from 'react-native-anchor-carousel';
-const amplitude = require('amplitude-js');
-amplitude.getInstance().init("API_KEY");
 
-
-// console.log(amplitude);
-
+Amplitude.initialize('89183eb6fc3a00f6789298af46314583');
 
 const { width } = Dimensions.get('window');
 
@@ -242,6 +239,11 @@ export default function App() {
         setToday(res.data.today);
         setTomorrow(res.data.tomorrow);
 
+        Amplitude.setUserId(res.data.id);
+        Amplitude.logEvent('enter', {
+          timestamp: res.data.timestamp
+        });
+
         if (res.data.sign === 'aries' ||
         res.data.sign === 'taurus' ||
         res.data.sign === 'gemini' ||
@@ -348,6 +350,7 @@ export default function App() {
             <TouchableOpacity
               style={ styles.touchButton }
               onPress={() => {
+                Amplitude.logEvent('continue', {});
                 let choose = data.find(data => data.sign === sign.sign);
                 setNewcomer(false);
                 setSign(choose);
