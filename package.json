@@ -11,6 +11,7 @@
     "@react-native-community/async-storage": "^1.12.0",
     "axios": "^0.19.2",
     "expo": "~38.0.8",
+    "expo-analytics-amplitude": "~8.2.1",
     "expo-font": "^8.2.2",
     "expo-linear-gradient": "~8.2.1",
     "expo-notifications": "^0.5.0",
@@ -19,8 +20,7 @@
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
     "react-native-anchor-carousel": "^3.1.2",
-    "react-native-web": "~0.11.7",
-    "expo-analytics-amplitude": "~8.2.1"
+    "react-native-web": "~0.11.7"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
