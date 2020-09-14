@@ -22,8 +22,8 @@ import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import Carousel from 'react-native-anchor-carousel';
 import { AdMobRewarded } from 'expo-ads-admob';
-const idBaner = 'ca-app-pub-6050546095426315/9026709170';
-// const idBaner = 'ca-app-pub-3940256099942544/5224354917'; // тест
+// const idBaner = 'ca-app-pub-6050546095426315/9026709170';
+const idBaner = 'ca-app-pub-3940256099942544/5224354917'; // тест
 
 Amplitude.initialize('89183eb6fc3a00f6789298af46314583');
 const { width } = Dimensions.get('window');
@@ -248,84 +248,52 @@ getHash = async () => {
   return value;
 }
 
-function renderItem({ item }) {
-  const { uri, icon } = item;
-  return (
-    <TouchableOpacity
-      activeOpacity={ 1 }
-      style={ styles.carousel }
-    >
-      <ImageBackground
-        source={ uri }
-        style={ styles.imageBackground }
-      ><Image source={ icon }></Image></ImageBackground>
-    </TouchableOpacity>
-  );
-}
+AdMob = async () => {
+  
+  let ready = true;
+  await AdMobRewarded.setAdUnitID(idBaner);
+  await AdMobRewarded.requestAdAsync().catch(() => {
+    ready = false;
+  });
 
-
-
-
-
-
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      counter: 0,
-      expoPushToken: '',
-      sign: data[startIndex],
-      isReady: false,
-      load: false,
-      id: null,
-      newcomer: true,
-      today: horoscopes,
-      tomorrow: horoscopes,
-      day: true,
-      openPanel: false,
-      ads: true
-    }
+  if (ready) {
+    await AdMobRewarded.showAdAsync();
   }
 
-  componentDidMount() {
+}
 
-    AdMobRewarded.addEventListener('rewardedVideoDidClose', () => {
+AdMobRewarded.addEventListener('rewardedVideoDidRewardUser', () => {
+  // console.log('реклама просмотрена!');
+});
 
-      Amplitude.logEvent('failAds', {});
-      this.setState({ ads: true });
 
-    });
+export default function App() {
+  const [counter, setCounter] = useState(0);
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [sign, setSign] = useState(data[startIndex]);
+  const [isReady, setIsReady] = useState(false);
+  const [load, setLoad] = useState(false);
+  const [id, setId] = useState(null);
+  const [newcomer, setNewcomer] = useState(true);
+  const [today, setToday] = useState(horoscopes);
+  const [tomorrow, setTomorrow] = useState(horoscopes);
+  const [day, setDay] = useState(true);
+  const [openPanel, setPanel] = useState(false);
+  const [ads, showAds] = useState(true);
 
-    AdMobRewarded.addEventListener('rewardedVideoDidRewardUser', () => {
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
-      Amplitude.logEvent('successAds', {});
-
-      let sign = this.state.sign;
-      let counter = this.state.counter + 1;
-
-      if (this.state.day) sign.todayAds = true;
-      else sign.tomorrowAds = true;
-      
-      this.setState({
-        ads: true,
-        sign: sign,
-        counter: counter
-      });
-
-    });
+  useEffect(() => {
     
     getHash().then(id => {
       axios.post(api + "/getData", { id: id }).then(res => {
-
+        setLoad(true);
+        setId(res.data.id);
         setHash(res.data.id);
-
-        this.setState({
-          load: true,
-          id: res.data.id,
-          newcomer: res.data.newcomer,
-          today: res.data.today,
-          tomorrow: res.data.tomorrow
-        })
+        setNewcomer(res.data.newcomer);
+        setToday(res.data.today);
+        setTomorrow(res.data.tomorrow);
 
         Amplitude.setUserId(res.data.id);
         Amplitude.logEvent('enter', {
@@ -346,14 +314,18 @@ export default class App extends React.Component {
         res.data.sign === 'pisces' ||
         res.data.sign === 'ophiuchus') {
           let sign = data.find(data => data.sign === res.data.sign);
-          this.setState({ sign: sign });
+          setSign(sign);
         }
 
       });
     });
     
-    registerForPushNotificationsAsync().then(token => {
-      this.setState({ expoPushToken: token });
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
     });
 
     return () => {
@@ -361,149 +333,39 @@ export default class App extends React.Component {
       Notifications.removeNotificationSubscription(responseListener);
     };
 
-  }
-
-  componentWillUnmount() {}
+  }, []);
 
 
-  async showAds() {
-
-    this.setState({ ads: false });
-               
-    let ready = true;
-    await AdMobRewarded.setAdUnitID(idBaner);
-    await AdMobRewarded.requestAdAsync().catch(() => {
-      ready = false;
-    });
-  
-    if (ready) {
-
-      await AdMobRewarded.showAdAsync();
-
-    } else {
-      
-      let sign = this.state.sign;
-      let counter = this.state.counter + 1;
-
-      if (this.state.day) sign.todayAds = true;
-      else sign.tomorrowAds = true;
-      
-      this.setState({
-        ads: true,
-        sign: sign,
-        counter: counter
-      });
-
-    }
-
+  if (!isReady) {
+    return (
+      <AppLoading 
+        startAsync={ loadApplication } 
+        onError={ err => console.log(err) }
+        onFinish={ () => setIsReady(true) }
+      />
+    )
   }
 
 
-  render() {
-
-    if (!this.state.isReady) {
-      return (
-        <AppLoading 
-          startAsync={ loadApplication } 
-          onError={ err => console.log(err) }
-          onFinish={ () => this.setState({ isReady: true}) }
-        />
-      )
-    }
-
-    if (!this.state.load) {
-      return (
-        <>
-          <StatusBar hidden />
-          <View style={ styles.loadingBody }>
-            <LinearGradient
-              colors={[ '#08051B', '#03082D' ]}
-              style={ styles.bgGradient }
-              start={{ x: 0, y: 1 }}
-              end={{ x: 1, y: 1 }}
-            />
-            <Text style={ styles.loading }>Загрузка...</Text>
-          </View>
-        </>
-      );
-    }
+  if (!load) {
+    return (
+      <>
+        <StatusBar hidden />
+        <View style={ styles.loadingBody }>
+          <LinearGradient
+            colors={[ '#08051B', '#03082D' ]}
+            style={ styles.bgGradient }
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 1 }}
+          />
+          <Text style={ styles.loading }>Загрузка...</Text>
+        </View>
+      </>
+    );
+  }
 
 
-    if (this.state.newcomer) {
-      return (
-        <>
-          <StatusBar hidden />
-          <View style={ styles.body }>
-            <LinearGradient
-              colors={[ '#08051B', '#03082D' ]}
-              style={ styles.bgGradient }
-              start={{ x: 0, y: 1 }}
-              end={{ x: 1, y: 1 }}
-            />
-            <View style={ styles.header }>
-              <Text style={ styles.accurateLabel }>Точный</Text>
-              <Text style={ styles.horoscopeLabel }>гороскоп</Text>
-              <View style={ styles.cookieBlock }>
-                <Text style={ styles.cookieLabel }>От создателей печеньки</Text>
-                <Image source={ require('./assets/images/cookie.png') } />
-              </View>
-            </View>
-            <View style={ styles.content }>
-              <View style={ styles.carouselContainer }>
-                <Carousel
-                  style={ styles.carousel }
-                  data={ data }
-                  renderItem={ renderItem }
-                  itemWidth={ 0.7 * width }
-                  inActiveOpacity={ 0.3 }
-                  containerWidth={ width }
-                  initialIndex={ startIndex }
-                  onScrollEnd={ (sign) => setTimeout(() => {
-                    this.setState({ sign: sign });
-                  }, 40) }
-                />
-              </View>
-              <View style={ styles.description }>
-                <Text style={ styles.nameSign }>{ this.state.sign.nameSign }</Text>
-                <Text style={ styles.period }>{ this.state.sign.period }</Text>
-                <Text style={ styles.desc }>{ this.state.sign.desc }</Text>
-              </View>
-            </View>
-            <View style={ styles.footer }>
-              <TouchableOpacity
-                style={ styles.touchButton }
-                onPress={() => {
-
-                  Amplitude.logEvent('continue', {});
-
-                  let choose = data.find(data => data.sign === this.state.sign.sign);
-
-                  this.setState({
-                    newcomer: false,
-                    sign: choose
-                  });
-                  const params = {
-                    id: this.state.id,
-                    sign: this.state.sign.sign
-                  }
-                  axios.post(api + "/setSign", params);
-
-                }}>
-                <LinearGradient
-                  colors={[ '#0255D6', '#15FFE3' ]}
-                  style={ styles.bigButton }
-                  start={{ x: 0, y: 1 }}
-                  end={{ x: 1, y: 1 }}
-                >
-                  <Text style={ styles.bigButtonText }>Далее</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </>
-      );
-    }
-
+  if (newcomer) {
     return (
       <>
         <StatusBar hidden />
@@ -514,128 +376,246 @@ export default class App extends React.Component {
             start={{ x: 0, y: 1 }}
             end={{ x: 1, y: 1 }}
           />
-          <View style={ styles.nav }>
-            <Image style={ styles.icon } source={ require('./assets/favicon.png') }></Image>
-            <Text style={ styles.accurateLogo }>Точный</Text>
-            <Text style={ styles.horoscopeLogo }>гороскоп</Text>
-            <TouchableOpacity style={ styles.chooseSign } onPress={ () => this.setState({ openPanel: !this.state.openPanel }) }>
-              <Text style={ styles.chooseText }>{ this.state.sign.nameSign }</Text>
-              { this.state.openPanel
+          <View style={ styles.header }>
+            <Text style={ styles.accurateLabel }>Точный</Text>
+            <Text style={ styles.horoscopeLabel }>гороскоп</Text>
+            <View style={ styles.cookieBlock }>
+              <Text style={ styles.cookieLabel }>От создателей печеньки</Text>
+              <Image source={ require('./assets/images/cookie.png') } />
+            </View>
+          </View>
+          <View style={ styles.content }>
+            <View style={ styles.carouselContainer }>
+              <Carousel
+                style={ styles.carousel }
+                data={ data }
+                renderItem={ renderItem }
+                itemWidth={ 0.7 * width }
+                inActiveOpacity={ 0.3 }
+                containerWidth={ width }
+                initialIndex={ startIndex }
+                onScrollEnd={ (sign) => setTimeout(() => setSign(sign), 40) }
+              />
+            </View>
+            <View style={ styles.description }>
+              <Text style={ styles.nameSign }>{ sign.nameSign }</Text>
+              <Text style={ styles.period }>{ sign.period }</Text>
+              <Text style={ styles.desc }>{ sign.desc }</Text>
+            </View>
+          </View>
+          <View style={ styles.footer }>
+            <TouchableOpacity
+              style={ styles.touchButton }
+              onPress={() => {
+                Amplitude.logEvent('continue', {});
+                let choose = data.find(data => data.sign === sign.sign);
+                setNewcomer(false);
+                setSign(choose);
+                const params = { id: id, sign: sign.sign }
+                axios.post(api + "/setSign", params);
+              }}>
+              <LinearGradient
+                colors={[ '#0255D6', '#15FFE3' ]}
+                style={ styles.bigButton }
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Text style={ styles.bigButtonText }>Далее</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </>
+    );
+  }
+
+
+  return (
+    <>
+      <StatusBar hidden />
+      <View style={ styles.body }>
+        <LinearGradient
+          colors={[ '#08051B', '#03082D' ]}
+          style={ styles.bgGradient }
+          start={{ x: 0, y: 1 }}
+          end={{ x: 1, y: 1 }}
+        />
+        <View style={ styles.nav }>
+          <Image style={ styles.icon } source={ require('./assets/favicon.png') }></Image>
+          <Text style={ styles.accurateLogo }>Точный</Text>
+          <Text style={ styles.horoscopeLogo }>гороскоп</Text>
+          <TouchableOpacity style={ styles.chooseSign } onPress={ () => setPanel(!openPanel) }>
+            <Text style={ styles.chooseText }>{ sign.nameSign }</Text>
+            { openPanel
+            ?
+            <Image source={ require('./assets/images/close.png') }></Image>
+            :
+            <Image source={ require('./assets/images/open.png') }></Image>
+            }
+          </TouchableOpacity>
+        </View>
+        { openPanel &&
+        <View style={ styles.panel }>
+          { data.map((data, index) => (
+            <TouchableOpacity
+              key={ index }
+              onPress={ () => {
+                setPanel(false);
+                setSign(data);
+                const params = { id: id, sign: data.sign }
+                axios.post(api + "/setSign", params);
+              } }
+            >
+              <Text style={ styles.textPanel }>{ data.nameSign }</Text>
+            </TouchableOpacity>
+          )) }
+        </View>
+        }
+        <ScrollView style={ styles.scrollView }>
+          <View style={ styles.signBlock }>
+            <Image source={ sign.uri }></Image>
+            <Image style={ styles.signIcon } source={ sign.icon }></Image>
+          </View>
+          <View style={ styles.buttons }>
+            <TouchableOpacity
+              style={ styles.todayButton }
+              onPress={() => {
+                showAds(true);
+                setDay(true)
+              } }
+            >
+              { day
               ?
-              <Image source={ require('./assets/images/close.png') }></Image>
+              <LinearGradient
+                colors={[ '#0255D6', '#15FFE3' ]}
+                style={ styles.buttonGradient }
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+              ><Text style={ styles.dayText }>Сегодня</Text></LinearGradient>
               :
-              <Image source={ require('./assets/images/open.png') }></Image>
+              <Text style={ styles.dayText }>Сегодня</Text>
+              }
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={ styles.tomorrowButton }
+              onPress={() => {
+                showAds(true);
+                setDay(false)
+              } }
+            >
+              { day
+              ?
+              <Text style={ styles.dayText }>Завтра</Text>
+              :
+              <LinearGradient
+                colors={[ '#0255D6', '#15FFE3' ]}
+                style={ styles.buttonGradient }
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+              ><Text style={ styles.dayText }>Завтра</Text></LinearGradient>
               }
             </TouchableOpacity>
           </View>
-          { this.state.openPanel &&
-          <View style={ styles.panel }>
-            { data.map((data, index) => (
-              <TouchableOpacity
-                key={ index }
-                onPress={ () => {
+          <Text style={ styles.horoscopeDay }>Гороскоп на { day ? todayWord : tomorrowWord }</Text>
+          <Text style={ styles.horoscopeText }>
+            { day && sign.todayAds && today[sign.sign] }
+            { !day && sign.tomorrowAds && tomorrow[sign.sign] }
+            { day && !sign.todayAds && today[sign.sign].substr(0, 100) + '...' }
+            { !day && !sign.tomorrowAds && tomorrow[sign.sign].substr(0, 100) + '...' }
+          </Text>
 
-                  this.setState({
-                    openPanel: false,
-                    sign: data
-                  });
+          { day && !sign.todayAds && ads &&
+          <TouchableOpacity
+            onPress={ async () => {
+ 
+              showAds(false);
+             
+              let ready = true;
+              await AdMobRewarded.setAdUnitID(idBaner);
+              await AdMobRewarded.requestAdAsync().catch(() => {
+                ready = false;
+              });
+            
+              if (ready) {
+                
+                showAds(true);
+                sign.todayAds = true;
+                setSign(sign);
+                setCounter(counter + 1);
 
-                  const params = {
-                    id: this.state.id,
-                    sign: data.sign
-                  }
-                  axios.post(api + "/setSign", params);
-                } }
-              >
-                <Text style={ styles.textPanel }>{ data.nameSign }</Text>
-              </TouchableOpacity>
-            )) }
-          </View>
+                await AdMobRewarded.showAdAsync();
+
+              } else {
+                
+                showAds(true);
+                sign.todayAds = true;
+                setSign(sign);
+                setCounter(counter + 1);
+
+              }
+
+            } }
+            >
+            <Text style={ styles.ads }>Посмотри рекламу и продолжи читать</Text>
+          </TouchableOpacity>
           }
-          <ScrollView style={ styles.scrollView }>
-            <View style={ styles.signBlock }>
-              <Image source={ this.state.sign.uri }></Image>
-              <Image style={ styles.signIcon } source={ this.state.sign.icon }></Image>
-            </View>
-            <View style={ styles.buttons }>
-              <TouchableOpacity
-                style={ styles.todayButton }
-                onPress={ () => {
 
-                  this.setState({
-                    ads: true,
-                    day: true
-                  });
+          { !day && !sign.tomorrowAds && ads &&
+          <TouchableOpacity
+            onPress={ async () => {
 
-                } }
-              >
-                { this.state.day
-                ?
-                <LinearGradient
-                  colors={[ '#0255D6', '#15FFE3' ]}
-                  style={ styles.buttonGradient }
-                  start={{ x: 0, y: 1 }}
-                  end={{ x: 1, y: 1 }}
-                ><Text style={ styles.dayText }>Сегодня</Text></LinearGradient>
-                :
-                <Text style={ styles.dayText }>Сегодня</Text>
-                }
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={ styles.tomorrowButton }
-                onPress={ () => {
+              showAds(false);
+              
+              let ready = true;
+              await AdMobRewarded.setAdUnitID(idBaner);
+              await AdMobRewarded.requestAdAsync().catch(() => {
+                ready = false;
+              });
+            
+              if (ready) {
+                
+                showAds(true);
+                sign.tomorrowAds = true;
+                setSign(sign);
+                setCounter(counter + 1);
 
-                  this.setState({
-                    ads: true,
-                    day: false
-                  });
+                await AdMobRewarded.showAdAsync();
 
-                } }
-              >
-                { this.state.day
-                ?
-                <Text style={ styles.dayText }>Завтра</Text>
-                :
-                <LinearGradient
-                  colors={[ '#0255D6', '#15FFE3' ]}
-                  style={ styles.buttonGradient }
-                  start={{ x: 0, y: 1 }}
-                  end={{ x: 1, y: 1 }}
-                ><Text style={ styles.dayText }>Завтра</Text></LinearGradient>
-                }
-              </TouchableOpacity>
-            </View>
-            <Text style={ styles.horoscopeDay }>Гороскоп на { this.state.day ? todayWord : tomorrowWord }</Text>
-            <Text style={ styles.horoscopeText }>
-              { this.state.day && this.state.sign.todayAds && this.state.today[this.state.sign.sign] }
-              { !this.state.day && this.state.sign.tomorrowAds && this.state.tomorrow[this.state.sign.sign] }
-              { this.state.day && !this.state.sign.todayAds && this.state.today[this.state.sign.sign].substr(0, 100) + '...' }
-              { !this.state.day && !this.state.sign.tomorrowAds && this.state.tomorrow[this.state.sign.sign].substr(0, 100) + '...' }
-            </Text>
-  
-            { this.state.day && !this.state.sign.todayAds && this.state.ads &&
-            <TouchableOpacity
-              onPress={ async () => this.showAds() }
-              >
-              <Text style={ styles.ads }>Посмотри рекламу и продолжи читать</Text>
-            </TouchableOpacity>
-            }
-  
-            { !this.state.day && !this.state.sign.tomorrowAds && this.state.ads &&
-            <TouchableOpacity
-              onPress={ async () => this.showAds() }
-              >
-              <Text style={ styles.ads }>Посмотри рекламу и продолжи читать</Text>
-            </TouchableOpacity>
-            }
-  
-          </ScrollView>
-        </View>
-      </>
-    )
-    
-  }
+              } else {
+                
+                showAds(true);
+                sign.tomorrowAds = true;
+                setSign(sign);
+                setCounter(counter + 1);
 
+              }
+
+            } }
+            >
+            <Text style={ styles.ads }>Посмотри рекламу и продолжи читать</Text>
+          </TouchableOpacity>
+          }
+
+        </ScrollView>
+      </View>
+    </>
+  )
+
+}
+
+function renderItem({ item }) {
+  const { uri, icon } = item;
+  return (
+    <TouchableOpacity
+      activeOpacity={ 1 }
+      style={ styles.carousel }
+    >
+      <ImageBackground
+        source={ uri }
+        style={ styles.imageBackground }
+      ><Image source={ icon }></Image></ImageBackground>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
