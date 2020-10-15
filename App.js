@@ -606,13 +606,20 @@ export default class App extends React.Component {
               </TouchableOpacity>
             </View>
             <Text style={ styles.horoscopeDay }>Гороскоп на { this.state.day ? todayWord : tomorrowWord }</Text>
+
+            { /* без рекламы */ }
+            {/* <Text style={ styles.horoscopeText }>
+              { this.state.day && this.state.today[this.state.sign.sign] }
+              { !this.state.day && this.state.tomorrow[this.state.sign.sign] }
+            </Text> */}
+
+            { /* с рекламой */ }
             <Text style={ styles.horoscopeText }>
               { this.state.day && this.state.sign.todayAds && this.state.today[this.state.sign.sign] }
               { !this.state.day && this.state.sign.tomorrowAds && this.state.tomorrow[this.state.sign.sign] }
               { this.state.day && !this.state.sign.todayAds && this.state.today[this.state.sign.sign].substr(0, 100) + '...' }
               { !this.state.day && !this.state.sign.tomorrowAds && this.state.tomorrow[this.state.sign.sign].substr(0, 100) + '...' }
             </Text>
-  
             { this.state.day && !this.state.sign.todayAds && this.state.ads &&
             <TouchableOpacity
               onPress={ async () => this.showAds() }
@@ -620,7 +627,6 @@ export default class App extends React.Component {
               <Text style={ styles.ads }>Посмотри рекламу и продолжи читать</Text>
             </TouchableOpacity>
             }
-  
             { !this.state.day && !this.state.sign.tomorrowAds && this.state.ads &&
             <TouchableOpacity
               onPress={ async () => this.showAds() }
