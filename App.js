@@ -5,7 +5,7 @@ import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -22,7 +22,7 @@ import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import Carousel from 'react-native-anchor-carousel';
 import { AdMobRewarded } from 'expo-ads-admob';
-const idBaner = 'ca-app-pub-6050546095426315/9026709170';
+const idBaner = 'ca-app-pub-9330413199095147/7581835372';
 // const idBaner = 'ca-app-pub-3940256099942544/5224354917'; // тест
 
 Amplitude.initialize('89183eb6fc3a00f6789298af46314583');
