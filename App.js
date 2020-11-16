@@ -375,9 +375,9 @@ export default class App extends React.Component {
   async loadAds() {
 
     if (!this.state.adsReady) {
-
+      
       await AdMobRewarded.setAdUnitID(idBaner); // задает AdUnitID для всех будущих запросов на рекламу.
-      AdMobRewarded.requestAdAsync()
+      await AdMobRewarded.requestAdAsync()
       .then(() => {
         this.setState({ adsReady: true }); // реклама готова
       })
