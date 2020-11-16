@@ -25,7 +25,7 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "package": "com.skorit.goroskop",
-      "versionCode": 13,
+      "versionCode": 14,
       "permissions": [],
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-9330413199095147~9028640809"

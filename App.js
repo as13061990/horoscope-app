@@ -283,22 +283,27 @@ export default class App extends React.Component {
       tomorrow: horoscopes,
       day: true,
       openPanel: false,
-      ads: true
+      ads: true,
+      adsReady: false
     }
   }
 
   componentDidMount() {
 
+    this.loadAds(); // запуск предзагрузки рекламы
+
     AdMobRewarded.addEventListener('rewardedVideoDidClose', () => {
 
-      Amplitude.logEvent('failAds', {});
       this.setState({ ads: true });
+      this.loadAds(); // запуск предзагрузки рекламы
 
     });
 
     AdMobRewarded.addEventListener('rewardedVideoDidRewardUser', () => {
 
-      Amplitude.logEvent('successAds', {});
+      Amplitude.logEvent('successAds', {
+        user_id: this.state.id
+      });
 
       let sign = this.state.sign;
       let counter = this.state.counter + 1;
@@ -366,17 +371,30 @@ export default class App extends React.Component {
   componentWillUnmount() {}
 
 
+  // прелоад рекламы
+  async loadAds() {
+
+    if (!this.state.adsReady) {
+
+      await AdMobRewarded.setAdUnitID(idBaner); // задает AdUnitID для всех будущих запросов на рекламу.
+      AdMobRewarded.requestAdAsync()
+      .then(() => {
+        this.setState({ adsReady: true }); // реклама готова
+      })
+
+    }
+
+  }
+
+
   async showAds() {
 
-    this.setState({ ads: false });
-               
-    let ready = true;
-    await AdMobRewarded.setAdUnitID(idBaner);
-    await AdMobRewarded.requestAdAsync().catch(() => {
-      ready = false;
+    this.setState({
+      ads: false,
+      adsReady: false
     });
   
-    if (ready) {
+    if (this.state.adsReady) {
 
       await AdMobRewarded.showAdAsync();
 
